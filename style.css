@@ -1,0 +1,21 @@
+
+
+
+table{
+  border: 1px #c1c1c1 solid;
+  margin: auto;
+
+
+}
+td{
+  border: 1px #c1c1c1 solid;
+  padding: 8px;
+}
+
+td.okey{
+  background:green;
+}
+td.error{
+  background:red;
+
+}
