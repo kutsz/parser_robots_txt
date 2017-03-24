@@ -1,34 +1,37 @@
 <?php
  if (isset($_POST['submit'])) {
-   $url = $_POST['URL'].'/robots.txt';
+     $url = $_POST['URL'].'/robots.txt';
 
-    require 'vendor/autoload.php';
+     require 'vendor/autoload.php';
 
-    $is_robot = file_get_contents($url)?true:false;
-    $parser = new RobotsTxtParser(file_get_contents($url));
+     $is_robot = file_get_contents($url)?true:false;
+     $parser = new RobotsTxtParser(file_get_contents($url));
 
-    $content = $parser->getContent();
+     $content = $parser->getContent();
 
-    $size = strlen($content);
+     $size = strlen($content);
 
-    $size_flag = false;
-    if($size <= 32000){
-      $size_flag = true;
-    }
+     $size_flag = false;
+     if ($size <= 32000) {
+         $size_flag = true;
+     }
 
-    $mainHost = $parser->getHost();
+     $mainHost = $parser->getHost();
 
-    $sitemaps_array = $parser->getSitemaps();
+     $sitemaps_array = $parser->getSitemaps();
 
-    function get_http_response_code($theURL) {
-        $headers = get_headers($theURL);
-        if($headers)
-        return substr($headers[0], 9, 3);
-        else return false;
-    }
+     function get_http_response_code($theURL)
+     {
+         $headers = get_headers($theURL);
+         if ($headers) {
+             return substr($headers[0], 9, 3);
+         } else {
+             return false;
+         }
+     }
 
-    $response_code = intval(get_http_response_code($url));
-}
+     $response_code = intval(get_http_response_code($url));
+ }
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +44,7 @@
   <body>
     <table>
         <!1------------------>
-        <?php if($is_robot): ?>
+        <?php if ($is_robot): ?>
           <tr>
             <td rowspan="2">1</td>
             <td rowspan="2">Проверка наличия файла robots.txt</td>
@@ -67,8 +70,8 @@
           </tr>
         <?php endif; ?>
       <!2-------------------->
-      <?php if($is_robot): ?>
-        <?php if($mainHost): ?>
+      <?php if ($is_robot): ?>
+        <?php if ($mainHost): ?>
         <tr>
           <td rowspan="2">6</td>
           <td rowspan="2">Проверка указания директивы Host</td>
@@ -95,8 +98,8 @@
         <?php endif; ?>
       <?php endif; ?>
       <!3-------------------->
-      <?php if($is_robot): ?>
-        <?php if($mainHost): ?>
+      <?php if ($is_robot): ?>
+        <?php if ($mainHost): ?>
         <tr>
           <td rowspan="2">8</td>
           <td rowspan="2">Проверка количества директив Host, прописанных в файле</td>
@@ -123,8 +126,8 @@
         <?php endif; ?>
       <?php endif; ?>
       <!4------------------->
-      <?php if($is_robot): ?>
-        <?php if($size_flag): ?>
+      <?php if ($is_robot): ?>
+        <?php if ($size_flag): ?>
         <tr>
           <td rowspan="2">10</td>
           <td rowspan="2">Проверка размера файла robots.txt</td>
@@ -151,8 +154,8 @@
         <?php endif; ?>
       <?php endif; ?>
       <!5------------------>
-      <?php if($is_robot): ?>
-        <?php if($sitemaps_array): ?>
+      <?php if ($is_robot): ?>
+        <?php if ($sitemaps_array): ?>
         <tr>
           <td rowspan="2">11</td>
           <td rowspan="2">Проверка указания директивы Sitemap</td>
@@ -179,8 +182,8 @@
         <?php endif; ?>
       <?php endif; ?>
       <!6------------------>
-      <?php if($is_robot): ?>
-        <?php if($response_code == 200): ?>
+      <?php if ($is_robot): ?>
+        <?php if ($response_code == 200): ?>
         <tr>
           <td rowspan="2">12</td>
           <td rowspan="2">Проверка кода ответа сервера для файла robots.txt</td>
