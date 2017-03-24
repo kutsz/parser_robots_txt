@@ -3,53 +3,22 @@
    $url = $_POST['URL'].'/robots.txt';
 
 require 'vendor/autoload.php';
-/*
-$cont = file_get_contents($url);
-var_dump(file_get_contents($url));
-$size = filesize($cont);
-echo $size."<br>";
 
-$flag =file_exists($url);
-var_dump($flag);
-echo "<br>";
-*/
 $is_robot = file_get_contents($url)?true:false;
-$parser = new RobotsTxtParser(file_get_contents($url));//http://ladygrad.com.ua/robots.txt
-//var_dump($parser);
-//var_dump((bool)$parser);
-//echo "<br>";
+$parser = new RobotsTxtParser(file_get_contents($url));
+
 $content = $parser->getContent();
-//$show = $parser->render();
+
 $size = strlen($content);
 $size_flag = false;
 if($size <= 32000){
   $size_flag = true;
 }
-//var_dump($content);
-//echo $content;
-////$size = filesize($content);
-//echo $size."<br>";
-//echo "<br>";
+
 $mainHost = $parser->getHost();
-/*
-//echo $mainHost."<br>";
-var_dump($mainHost);
-echo "<br>";
-$status = $parser->setHttpStatusCode(200);
-echo $status."<br>";
-echo "<br>";
-*/
+
 $sitemaps_array = $parser->getSitemaps();
-/*
-var_dump($sitemaps_array);
-echo "<br>";
-//echo http_response_code()."<br>";
-echo "<br>";
-print_r(get_headers($url));
-echo "<br>";
-echo intval(false)."<br>";
-echo "<br>";
-*/
+
 function get_http_response_code($theURL) {
     $headers = get_headers($theURL);
     if($headers)
@@ -58,7 +27,7 @@ function get_http_response_code($theURL) {
 }
 
 $response_code = intval(get_http_response_code($url));
-//$response_code = 404;
+
  }
 
 ?>
