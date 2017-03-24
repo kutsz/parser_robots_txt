@@ -8,14 +8,16 @@ $cont = file_get_contents($url);
 var_dump(file_get_contents($url));
 $size = filesize($cont);
 echo $size."<br>";
-*/
+
 $flag =file_exists($url);
 var_dump($flag);
 echo "<br>";
+*/
 $is_robot = file_get_contents($url)?true:false;
 $parser = new RobotsTxtParser(file_get_contents($url));//http://ladygrad.com.ua/robots.txt
-var_dump($parser);
-var_dump((bool)$parser);
+//var_dump($parser);
+//var_dump((bool)$parser);
+//echo "<br>";
 $content = $parser->getContent();
 //$show = $parser->render();
 $size = strlen($content);
@@ -26,15 +28,37 @@ if($size <= 32000){
 //var_dump($content);
 //echo $content;
 ////$size = filesize($content);
-echo $size."<br>";
+//echo $size."<br>";
+//echo "<br>";
 $mainHost = $parser->getHost();
+/*
 //echo $mainHost."<br>";
 var_dump($mainHost);
+echo "<br>";
 $status = $parser->setHttpStatusCode(200);
 echo $status."<br>";
+echo "<br>";
+*/
 $sitemaps_array = $parser->getSitemaps();
+/*
 var_dump($sitemaps_array);
-var_dump(http_response_code());
+echo "<br>";
+//echo http_response_code()."<br>";
+echo "<br>";
+print_r(get_headers($url));
+echo "<br>";
+echo intval(false)."<br>";
+echo "<br>";
+*/
+function get_http_response_code($theURL) {
+    $headers = get_headers($theURL);
+    if($headers)
+    return substr($headers[0], 9, 3);
+    else return false;
+}
+
+$response_code = intval(get_http_response_code($url));
+//$response_code = 404;
  }
 
 ?>
@@ -48,6 +72,7 @@ var_dump(http_response_code());
   <body>
     <table>
       <!-- -------------1----->
+
       <?php if($is_robot): ?>
     <tr>
       <td rowspan="2">1</td>
@@ -76,7 +101,8 @@ var_dump(http_response_code());
     <?php endif; ?>
 
 <!-- -------------2----->
-  <?php if($mainHost && $is_robot): ?>
+<?php if($is_robot): ?>
+  <?php if($mainHost): ?>
 <tr>
   <td rowspan="2">6</td>
   <td rowspan="2">Проверка указания директивы Host</td>
@@ -103,8 +129,10 @@ var_dump(http_response_code());
 
 </tr>
 <?php endif; ?>
+<?php endif; ?>
 <!-- ----------3-------->
-  <?php if(true && $is_robot): ?>
+<?php if($is_robot): ?>
+  <?php if($mainHost): ?>
 <tr>
   <td rowspan="2">8</td>
   <td rowspan="2">Проверка количества директив Host, прописанных в файле</td>
@@ -131,8 +159,10 @@ var_dump(http_response_code());
 
 </tr>
 <?php endif; ?>
+<?php endif; ?>
 <!-- -----------4------->
-  <?php if($size_flag && $is_robot): ?>
+<?php if($is_robot): ?>
+  <?php if($size_flag): ?>
 <tr>
   <td rowspan="2">10</td>
   <td rowspan="2">Проверка размера файла robots.txt</td>
@@ -159,8 +189,10 @@ var_dump(http_response_code());
 
 </tr>
 <?php endif; ?>
+<?php endif; ?>
 <!-- ----------5-------->
-  <?php if($sitemaps_array && $is_robot): ?>
+<?php if($is_robot): ?>
+  <?php if($sitemaps_array): ?>
 <tr>
   <td rowspan="2">11</td>
   <td rowspan="2">Проверка указания директивы Sitemap</td>
@@ -187,8 +219,10 @@ var_dump(http_response_code());
 
 </tr>
 <?php endif; ?>
+<?php endif; ?>
 <!-- -------6----------->
-  <?php if(false && $is_robot): ?>
+<?php if($is_robot): ?>
+  <?php if($response_code == 200): ?>
 <tr>
   <td rowspan="2">12</td>
   <td rowspan="2">Проверка кода ответа сервера для файла robots.txt</td>
@@ -207,13 +241,14 @@ var_dump(http_response_code());
   <td rowspan="2">Проверка кода ответа сервера для файла robots.txt</td>
   <td rowspan="2" class="error">Ошибка</td>
   <td>Состояние</td>
-  <td>При обращении к файлу robots.txt сервер возвращает код ответа (указать код)</td>
+  <td>При обращении к файлу robots.txt сервер возвращает код ответа <?= $response_code ?></td>
 </tr>
 <tr>
   <td>Рекомендации</td>
   <td>Программист: Файл robots.txt должны отдавать код ответа 200, иначе файл не будет обрабатываться. Необходимо настроить сайт таким образом, чтобы при обращении к файлу robots.txt сервер возвращает код ответа 200</td>
 
 </tr>
+<?php endif; ?>
 <?php endif; ?>
     </table>
   </body>
